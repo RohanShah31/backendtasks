@@ -1,13 +1,3 @@
-# 🚀 GDG Tech Wildcard Entry — Backend Development Suite
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.13" />
-  <img src="https://img.shields.io/badge/FastAPI-0.116-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/SQLite-WAL_Mode-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite WAL" />
-  <img src="https://img.shields.io/badge/Tests-11%20Passed-brightgreen?style=for-the-badge&logo=pytest&logoColor=white" alt="Tests 11 Passed" />
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" />
-  <img src="https://img.shields.io/badge/GDG%20VIT%20Vellore-Wildcard%20Entry-EA4335?style=for-the-badge&logo=google&logoColor=white" alt="GDG VIT Vellore" />
-</p>
 
 > **Comprehensive, production-ready solution for both Backend Challenge Tasks:**
 > 1. **Task 1: Campus Sensor Monitoring & Alerts** — High-throughput ingestion of **10,000+ readings/second**, in-memory sliding time-window rule evaluator, telemetry simulator, and burst load-test report.
