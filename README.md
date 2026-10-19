@@ -18,8 +18,6 @@
 - [Task 2: Workshop Registration and Notifications](#-task-2-workshop-registration-and-notifications)
   - [The Transactional Outbox Pattern](#the-transactional-outbox-pattern)
   - [Handling Failures, Restarts & Duplicate Delivery](#handling-failures-restarts--duplicate-delivery)
-  - [Interactive Resilience Demonstration](#interactive-resilience-demonstration)
-- [Automated Test Suite (11/11 Passing)](#-automated-test-suite)
 
 
 ---
