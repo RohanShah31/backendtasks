@@ -144,17 +144,7 @@ Tested on a local machine using `python run_all.py loadtest`:
 
 Full load test report is available in [`task1_sensor_monitoring/LOAD_TEST_REPORT.md`](task1_sensor_monitoring/LOAD_TEST_REPORT.md).
 
-### Telemetry Simulator
-Run continuous telemetry generation simulating sensors across campus (library, server rooms, labs, auditoriums):
-```bash
-# Terminal 1: Start backend
-python run_all.py task1
 
-# Terminal 2: Run simulator
-python run_all.py simulator
-```
-
----
 
 ## 🎫 Task 2: Workshop Registration and Notifications
 
@@ -189,62 +179,9 @@ Member Register ──► [ SQLite Atomic Transaction ]
 4. **Crash Recovery:** When the backend restarts, the worker automatically queries the database for pending or retrying jobs and resumes delivery.
 5. **Workshop Cancellation:** Cancelling a workshop updates status to `CANCELLED` and atomically enqueues cancellation notifications for all registered members.
 
-### Interactive Resilience Demonstration
-Demonstrates the complete fault-tolerance lifecycle in one command:
-```bash
-# Terminal 1: Start mock service
-python run_all.py mock2
 
-# Terminal 2: Start workshop service
-python run_all.py task2
 
-# Terminal 3: Run resilience demo
-python run_all.py demo2
-```
-*Demonstrates instant registration, duplicate rejection (409 Conflict), downstream outage handling (HTTP 503), retry scheduling, recovery delivery, and cancellation broadcast.*
 
----
-
-## 🧪 Automated Test Suite
-
-Run all tests across both tasks:
-
-```bash
-python run_all.py test
-```
-
-### Test Coverage Summary:
-- **Task 1 (`test_sensors.py`):**
-  - ✅ Health check & bootstrapping
-  - ✅ Single reading ingestion & immediate threshold alert triggering
-  - ✅ High-throughput batch ingestion
-  - ✅ Dynamic rule creation, editing, and enabling/disabling
-  - ✅ 10-minute sliding time-window rolling average calculation
-  - ✅ Alert acknowledgment & resolution lifecycle
-- **Task 2 (`test_workshop.py`):**
-  - ✅ Workshop creation & capacity enforcement
-  - ✅ Atomic member registration & immediate outbox entry
-  - ✅ Duplicate email registration rejection (HTTP 409 Conflict)
-  - ✅ Workshop cancellation broadcast to all confirmed attendees
-
----
-
-## 🎤 Interview Explanation Guide
-
-Use this concise narrative to explain the project during your evaluation:
-
-### 1. High-Level Summary
-> *"For this challenge, I completed both Task 1 and Task 2 using Python and FastAPI with an embedded SQLite database configured in WAL mode. I avoided heavy external brokers like Kafka or Redis to keep the architecture lightweight, transparent, and easy to run locally while adhering to production-grade distributed systems patterns."*
-
-### 2. Task 1: How did you achieve 10,000 readings in 1 second?
-> *"In a high-throughput monitoring backend, synchronous disk writes per reading create an I/O bottleneck. I implemented a two-tier architecture:*
-> *First, the **In-Memory Tier**: incoming readings are validated and immediately evaluated against rules in RAM. Single-reading rules take sub-microsecond time, and time-window rules use circular sliding deques (`collections.deque`) to prune expired readings and compute rolling averages in O(1) amortized time.*
-> *Second, the **Decoupled Persistence Tier**: readings are enqueued into an in-memory queue, and a background worker commits them in bulk chunks using SQLite's `executemany` with Write-Ahead Logging (WAL). This allowed us to ingest and evaluate 10,000 readings in 0.93 seconds with 100% success rate."*
-
-### 3. Task 2: How did you guarantee reliable notifications across failures and restarts?
-> *"I implemented the **Transactional Outbox Pattern**.*
-> *Instead of calling the notification service synchronously inside the registration request—which is slow and risks partial failure—we insert both the registration and the notification job in the same atomic database transaction. The user receives an immediate response in under 20ms.*
-> *A background outbox worker polls for pending jobs and dispatches them concurrently. If the mock service goes down, the worker retries with **exponential backoff and jitter**, ensuring Member A's retry never blocks Member B. Each message carries an **idempotency key** to prevent duplicate deliveries, and because all jobs are stored on disk in the database, if the backend crashes or reboots, the worker resumes right where it left off upon startup."*
 
 ---
 
