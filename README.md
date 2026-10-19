@@ -20,7 +20,7 @@
   - [Handling Failures, Restarts & Duplicate Delivery](#handling-failures-restarts--duplicate-delivery)
   - [Interactive Resilience Demonstration](#interactive-resilience-demonstration)
 - [Automated Test Suite (11/11 Passing)](#-automated-test-suite)
-- [Interview Explanation Guide (How to Explain the Entire Project in 3 Minutes)](#-interview-explanation-guide)
+
 
 ---
 
